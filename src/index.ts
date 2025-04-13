@@ -7,7 +7,6 @@ bot.on('message', (ctx) => {
 	ctx.reply('Hello World!');
 })
 
-
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		if (request.method === 'POST') {
@@ -20,6 +19,13 @@ export default {
 			}
 
 			return new Response('OK', { status: 200 });
+		}
+
+		if (request.url.endsWith('/register')) {
+			await bot.telegram.setWebhook(
+				`https://${env.TELEGRAM_BOT_DOMAIN}/${env.TELEGRAM_BOT_PATH}`,
+			)
+			return new Response('Webhook registered', { status: 200 });
 		}
 
 		return new Response('Hello World!');
