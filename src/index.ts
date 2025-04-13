@@ -8,6 +8,7 @@ import { env } from 'cloudflare:workers';
 const app = new Hono();
 const provider = createOpenAI({
 	apiKey: env.OPENAI_API_TOKEN,
+	baseURL: env.CLOUDFLARE_AI_GATEWAY ? `${env.CLOUDFLARE_AI_GATEWAY}/openai` : undefined
 })
 const model = provider('gpt-4o-mini')
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
