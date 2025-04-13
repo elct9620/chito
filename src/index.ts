@@ -16,6 +16,7 @@ const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 bot.on(message('text'), async (ctx) => {
 	const { text } = await generateText({
 		model: model,
+		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
 		messages: [
 			{
 				role: 'user',
