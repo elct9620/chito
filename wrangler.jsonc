@@ -31,8 +31,6 @@
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 	 */
 	"vars": {
-		"TELEGRAM_BOT_DOMAIN": "example.com",
-		"TELEGRAM_BOT_PATH": ""
 	},
 	/**
 	 * Note: Use secrets to store sensitive data.
