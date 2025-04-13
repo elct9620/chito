@@ -1,14 +1,29 @@
 import { Hono } from 'hono';
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
+import { generateText } from 'ai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { env } from 'cloudflare:workers';
 
 const app = new Hono();
-
+const provider = createOpenAI({
+	apiKey: env.OPENAI_API_TOKEN,
+})
+const model = provider('gpt-4o-mini')
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
 bot.on(message('text'), async (ctx) => {
-	await ctx.reply('Hello World!');
+	const { text } = await generateText({
+		model: model,
+		messages: [
+			{
+				role: 'user',
+				content: ctx.message.text,
+			}
+		]
+	})
+
+	await ctx.reply(text);
 })
 
 app.get('/', (c) => {
