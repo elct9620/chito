@@ -28,6 +28,27 @@ bot.on(message('text'), async (ctx) => {
 	await ctx.reply(text);
 })
 
+bot.on(message('photo'), async (ctx) => {
+	const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
+	const fileUrl = await ctx.telegram.getFileLink(fileId);
+
+	const { text } = await generateText({
+		model: model,
+		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		messages: [
+			{
+				role: 'user',
+				content: [
+					{ type: 'text', text: 'Convert this image to readable markdown' },
+					{ type: 'image', image: fileUrl.toString() },
+				]
+			}
+		]
+	})
+
+	await ctx.reply(text);
+});
+
 app.get('/', (c) => {
 	return c.text('Hello World!');
 });
