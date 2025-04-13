@@ -7,6 +7,9 @@
 	"name": "chito",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-13",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
 	"observability": {
 		"enabled": true
 	}
