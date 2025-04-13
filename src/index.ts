@@ -1,18 +1,27 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Telegraf } from 'telegraf';
+import { env } from 'cloudflare:workers';
+
+const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
+
+bot.on('message', (ctx) => {
+	ctx.reply('Hello World!');
+})
+
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
+		if (request.method === 'POST') {
+			const body = await request.json();
+			try {
+				await bot.handleUpdate(body as any);
+			} catch (error) {
+				console.error('Error handling update:', error);
+				return new Response('Error handling update', { status: 500 });
+			}
+
+			return new Response('OK', { status: 200 });
+		}
+
 		return new Response('Hello World!');
 	},
 } satisfies ExportedHandler<Env>;
