@@ -4,8 +4,8 @@ import { env } from 'cloudflare:workers';
 
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
-bot.on(message('text'), (ctx) => {
-	ctx.reply('Hello World!');
+bot.on(message('text'), async (ctx) => {
+	await ctx.reply('Hello World!');
 })
 
 export default {
