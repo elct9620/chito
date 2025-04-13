@@ -32,9 +32,18 @@ bot.on(message('photo'), async (ctx) => {
 	const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
 	const fileUrl = await ctx.telegram.getFileLink(fileId);
 
-	const { text } = await generateText({
+	const { text: ocrText } = await generateText({
 		model: model,
-		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		system: `
+Convert the following document to markdown.
+Return only the markdown with no explanation text. Do not include delimiters like '''markdown or '''.
+
+RULES:
+	- You must include all information on the page. Do not exclude headers, footers, or subtext.
+	- Charts & infographics must be interpreted to a markdown format. Prefer table format when applicable.
+	- For tables with double headers, prefer adding a new column.
+	- Logos should be wrapped in square brackets. Ex: [Coca-Cola]
+		`,
 		messages: [
 			{
 				role: 'user',
@@ -42,6 +51,21 @@ bot.on(message('photo'), async (ctx) => {
 					{ type: 'text', text: 'Convert this image to readable markdown' },
 					{ type: 'image', image: fileUrl.toString() },
 				]
+			}
+		]
+	})
+
+	const { text } = await generateText({
+		model: model,
+		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		messages: [
+			{
+				role: 'system',
+				content: `The OCR result is: ${ocrText}`
+			},
+			{
+				role: 'user',
+				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily. Do not include any markdown formatting. Make sure to include the date and time of the receipt and detail the items I bought. Do not include any other information.`'
 			}
 		]
 	})
