@@ -17,7 +17,7 @@ app.get('/', (c) => {
 
 app.get('/register', async (c) => {
 	await bot.telegram.setWebhook(
-		`https://${env.TELEGRAM_BOT_DOMAIN}/${env.TELEGRAM_BOT_PATH ?? ""}`,
+		`https://${env.TELEGRAM_BOT_DOMAIN}/webhook`,
 	);
 	return c.text('Webhook registered');
 });
