@@ -65,7 +65,7 @@ RULES:
 			},
 			{
 				role: 'user',
-				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily. Do not include any markdown formatting. Make sure to include the location, date and time of the receipt and detail the items I bought. Do not include any other information.`'
+				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily, give description in items if not zh-TW. Do not include any markdown formatting. Make sure to include the location, date and time of the receipt and detail the items I bought. Do not include any other information.`'
 			}
 		]
 	})
