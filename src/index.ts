@@ -1,9 +1,10 @@
 import { Telegraf } from 'telegraf';
+import { message } from 'telegraf/filters';
 import { env } from 'cloudflare:workers';
 
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
-bot.on('message', (ctx) => {
+bot.on(message('text'), (ctx) => {
 	ctx.reply('Hello World!');
 })
 
@@ -23,7 +24,7 @@ export default {
 
 		if (request.url.endsWith('/register')) {
 			await bot.telegram.setWebhook(
-				`https://${env.TELEGRAM_BOT_DOMAIN}/${env.TELEGRAM_BOT_PATH}`,
+				`https://${env.TELEGRAM_BOT_DOMAIN}/${env.TELEGRAM_BOT_PATH ?? ""}`,
 			)
 			return new Response('Webhook registered', { status: 200 });
 		}
