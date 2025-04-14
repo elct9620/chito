@@ -85,16 +85,18 @@ RULES:
 			...conversation.messages,
 			{
 				role: 'system',
-				content: `The OCR result is: ${ocrText}`
+				content: `${ocrText}`
 			},
 			{
 				role: 'user',
-				content: `Summarize receipt in bullet notes with emojis in Chinese (Taiwanses, zh-TW) and include the following information:
+				content: `Summarize receipt in Chinese (Taiwanses, zh-TW) and include the following information:
 1. Do not include any markdown formatting.
-2. Include store name or location, date and time of the receipt.
+2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.
+2. Include store name, location, date and time of the receipt.
 3. Include detail the items in receipt both in Chinese (Taiwanses, zh-TW) and original language.
+4. Include the total amount in the summary.
 
-Do not include any other information.`
+Do not include any other information not related to the receipt.`
 			}
 		]
 	}
