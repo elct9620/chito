@@ -12,6 +12,7 @@ const provider = createOpenAI({
 	baseURL: env.CLOUDFLARE_AI_GATEWAY ? `${env.CLOUDFLARE_AI_GATEWAY}/openai` : undefined
 })
 const model = provider('gpt-4o-mini')
+const highModel = provider('gpt-4o')
 const repository = new KvConversationRepository(env.KV)
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
@@ -58,7 +59,7 @@ bot.on(message('photo'), async (ctx) => {
 	const fileUrl = await ctx.telegram.getFileLink(fileId);
 
 	const { text: ocrText } = await generateText({
-		model: model,
+		model: highModel,
 		system: `
 Convert the following document to markdown.
 Return only the markdown with no explanation text. Do not include delimiters like '''markdown or '''.
