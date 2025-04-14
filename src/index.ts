@@ -73,7 +73,6 @@ RULES:
 			{
 				role: 'user',
 				content: [
-					{ type: 'text', text: 'Convert this image to readable markdown' },
 					{ type: 'image', image: fileUrl.toString() },
 				]
 			}
@@ -85,25 +84,26 @@ RULES:
 			...conversation.messages,
 			{
 				role: 'system',
-				content: `${ocrText}`
+				content: `The text recognized from the image is:
+${ocrText}`
 			},
 			{
 				role: 'user',
-				content: `Summarize receipt in Chinese (Taiwanses, zh-TW) and include the following information:
-1. Do not include any markdown formatting.
-2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.
-2. Include store name, location, date and time of the receipt.
-3. Include detail the items in receipt both in Chinese (Taiwanses, zh-TW) and original language.
-4. Include the total amount in the summary.
-
-Do not include any other information not related to the receipt.`
+				content: `Help me to take a note of the receipt.`
 			}
 		]
 	}
 
 	const { text } = await generateText({
 		model: model,
-		system: 'You are travel assistant. Help the user to resolve their question in Chinese (Taiwanses, zh-TW)',
+		system: `Summarize receipt in Chinese (Taiwanses, zh-TW) and include the following information:
+1. Do not include any markdown formatting.
+2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.
+2. Include store name, location, date and time of the receipt.
+3. Include detail the items in receipt both in Chinese (Taiwanses, zh-TW) and original language.
+4. Include the total amount in the summary.
+
+Do not include any other information not related to the receipt.`,
 		messages: conversation.messages
 	})
 
