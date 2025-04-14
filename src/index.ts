@@ -31,7 +31,7 @@ bot.on(message('text'), async (ctx) => {
 
 	const { text } = await generateText({
 		model: model,
-		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		system: 'You are travel assistant. Help the user to resolve their question in Chinese (Taiwanses, zh-TW)',
 		messages: conversation.messages
 	})
 
@@ -89,14 +89,21 @@ RULES:
 			},
 			{
 				role: 'user',
-				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily, include original text and translation if not zh-TW. Do not include any markdown formatting. Make sure to include the location, date and time of the receipt and detail the items I bought. Do not include any other information.'
+				content: `Summarize receipt in bullet notes with emojis.
+Rules:
+1. Translate to zh-TW with original text.
+2. Do not include any markdown formatting.
+3. Include store name or location, date and time of the receipt.
+4. Include detail the items in receipt.
+
+Do not include any other information.`
 			}
 		]
 	}
 
 	const { text } = await generateText({
 		model: model,
-		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		system: 'You are travel assistant. Help the user to resolve their question in Chinese (Taiwanses, zh-TW)',
 		messages: conversation.messages
 	})
 
