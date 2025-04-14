@@ -89,12 +89,10 @@ RULES:
 			},
 			{
 				role: 'user',
-				content: `Summarize receipt in bullet notes with emojis.
-Rules:
-1. Translate to zh-TW with original text.
-2. Do not include any markdown formatting.
-3. Include store name or location, date and time of the receipt.
-4. Include detail the items in receipt.
+				content: `Summarize receipt in bullet notes with emojis in Chinese (Taiwanses, zh-TW) and include the following information:
+1. Do not include any markdown formatting.
+2. Include store name or location, date and time of the receipt.
+3. Include detail the items in receipt both in Chinese (Taiwanses, zh-TW) and original language.
 
 Do not include any other information.`
 			}
