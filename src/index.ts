@@ -17,9 +17,9 @@ const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
 bot.on(message('text'), async (ctx) => {
 	const conversationId = ctx.message.chat.id.toString();
-	const conversation = await repository.find(conversationId);
+	let conversation = await repository.find(conversationId);
 
-	const newConversation: ConversationSchema = {
+	conversation = {
 		messages: [
 			...conversation.messages,
 			{
@@ -32,10 +32,21 @@ bot.on(message('text'), async (ctx) => {
 	const { text } = await generateText({
 		model: model,
 		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
-		messages: newConversation.messages
+		messages: conversation.messages
 	})
 
-	await repository.save(conversationId, newConversation);
+	conversation = {
+		...conversation,
+		messages: [
+			...conversation.messages,
+			{
+				role: 'assistant',
+				content: text,
+			}
+		]
+	}
+
+	await repository.save(conversationId, conversation);
 	await ctx.reply(text);
 })
 
