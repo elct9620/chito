@@ -51,6 +51,9 @@ bot.on(message('text'), async (ctx) => {
 })
 
 bot.on(message('photo'), async (ctx) => {
+	const conversationId = ctx.message.chat.id.toString();
+	let conversation = await repository.find(conversationId);
+
 	const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
 	const fileUrl = await ctx.telegram.getFileLink(fileId);
 
@@ -77,21 +80,38 @@ RULES:
 		]
 	})
 
-	const { text } = await generateText({
-		model: model,
-		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+	conversation = {
 		messages: [
+			...conversation.messages,
 			{
 				role: 'system',
 				content: `The OCR result is: ${ocrText}`
 			},
 			{
 				role: 'user',
-				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily, include original text and translation if not zh-TW. Do not include any markdown formatting. Make sure to include the location, date and time of the receipt and detail the items I bought. Do not include any other information.`'
-			},
+				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily, include original text and translation if not zh-TW. Do not include any markdown formatting. Make sure to include the location, date and time of the receipt and detail the items I bought. Do not include any other information.'
+			}
 		]
+	}
+
+	const { text } = await generateText({
+		model: model,
+		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		messages: conversation.messages
 	})
 
+	conversation = {
+		...conversation,
+		messages: [
+			...conversation.messages,
+			{
+				role: 'assistant',
+				content: text,
+			}
+		]
+	}
+
+	await repository.save(conversationId, conversation);
 	await ctx.reply(text);
 });
 
