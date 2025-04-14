@@ -31,7 +31,7 @@ export class KvConversationRepository {
 	) {}
 
 	async find(id: string): Promise<ConversationSchema> {
-		const conversation = await this.kv.get<ConversationSchema>(id, 'json');
+		const conversation = await this.kv.get<ConversationSchema>(`conversation:${id}`, 'json');
 		if (!conversation) {
 			return { messages: [] };
 		}
@@ -39,6 +39,6 @@ export class KvConversationRepository {
 	}
 
 	async save(id: string, conversation: ConversationSchema): Promise<void> {
-		await this.kv.put(id, JSON.stringify(conversation));
+		await this.kv.put(`conversation:${id}`, JSON.stringify(conversation));
 	}
 }
