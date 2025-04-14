@@ -4,6 +4,7 @@ import { message } from 'telegraf/filters';
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { env } from 'cloudflare:workers';
+import { ConversationSchema, KvConversationRepository } from './repository/KvConversationRepository';
 
 const app = new Hono();
 const provider = createOpenAI({
@@ -11,20 +12,30 @@ const provider = createOpenAI({
 	baseURL: env.CLOUDFLARE_AI_GATEWAY ? `${env.CLOUDFLARE_AI_GATEWAY}/openai` : undefined
 })
 const model = provider('gpt-4o-mini')
+const repository = new KvConversationRepository(env.KV)
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
 bot.on(message('text'), async (ctx) => {
-	const { text } = await generateText({
-		model: model,
-		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+	const conversationId = ctx.message.chat.id.toString();
+	const conversation = await repository.find(conversationId);
+
+	const newConversation: ConversationSchema = {
 		messages: [
+			...conversation.messages,
 			{
 				role: 'user',
 				content: ctx.message.text,
 			}
 		]
+	}
+
+	const { text } = await generateText({
+		model: model,
+		system: 'You are a helpful assistant. Answer the user\'s question in Chinese (Taiwanses, zh-TW)',
+		messages: conversation.messages
 	})
 
+	await repository.save(conversationId, newConversation);
 	await ctx.reply(text);
 })
 
@@ -66,7 +77,7 @@ RULES:
 			{
 				role: 'user',
 				content: 'Please summarize receipt in bullet notes with emojis that I can understand easily, include original text and translation if not zh-TW. Do not include any markdown formatting. Make sure to include the location, date and time of the receipt and detail the items I bought. Do not include any other information.`'
-			}
+			},
 		]
 	})
 
