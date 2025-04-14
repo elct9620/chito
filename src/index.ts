@@ -32,7 +32,7 @@ bot.on(message('text'), async (ctx) => {
 
 	const { text } = await generateText({
 		model: model,
-		system: 'You are travel assistant. Help the user to resolve their question in Chinese (Taiwanses, zh-TW)',
+		system: 'You are travel assistant. Help the user to resolve their question in Chinese (Taiwan)',
 		messages: conversation.messages
 	})
 
@@ -90,7 +90,7 @@ ${ocrText}`
 			},
 			{
 				role: 'user',
-				content: `Help me to take a note of the receipt in Chinese (Taiwanses, zh-TW)`
+				content: `Help me to take a note of the receipt in Chinese (Taiwan)`
 			}
 		]
 	}
@@ -101,7 +101,7 @@ ${ocrText}`
 1. Do not include any markdown formatting.
 2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.
 2. Include store name, location, date and time of the receipt.
-3. Include detail the items in receipt both original and translated.
+3. Include detail the items in receipt both original and translated to Chinese (Taiwan).
 4. Include the total amount in the summary.
 
 Do not include any other information not related to the receipt.`,
