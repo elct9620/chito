@@ -101,7 +101,7 @@ ${ocrText}`
 1. Do not include any markdown formatting.
 2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.
 2. Include store name, location, date and time of the receipt.
-3. Include detail the items in receipt both in Chinese (Taiwanses, zh-TW) and original language.
+3. Include detail the items in receipt both original and translated.
 4. Include the total amount in the summary.
 
 Do not include any other information not related to the receipt.`,
