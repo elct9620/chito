@@ -90,14 +90,14 @@ ${ocrText}`
 			},
 			{
 				role: 'user',
-				content: `Help me to take a note of the receipt.`
+				content: `Help me to take a note of the receipt in Chinese (Taiwanses, zh-TW)`
 			}
 		]
 	}
 
 	const { text } = await generateText({
 		model: model,
-		system: `Summarize receipt in Chinese (Taiwanses, zh-TW) and include the following information:
+		system: `Summarize receipt include the following information:
 1. Do not include any markdown formatting.
 2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.
 2. Include store name, location, date and time of the receipt.
