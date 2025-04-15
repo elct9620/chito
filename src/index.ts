@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Hono } from 'hono';
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';

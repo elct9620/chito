@@ -17,9 +17,15 @@ importers:
       hono:
         specifier: ^4.7.6
         version: 4.7.6
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
       telegraf:
         specifier: ^4.16.3
         version: 4.16.3
+      tsyringe:
+        specifier: ^4.9.1
+        version: 4.9.1
     devDependencies:
       '@cloudflare/vitest-pool-workers':
         specifier: ^0.7.5
@@ -1151,6 +1157,9 @@ packages:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
     engines: {node: '>=0.10.0'}
 
+  reflect-metadata@0.2.2:
+    resolution: {integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==}
+
   rollup-plugin-inject@3.0.2:
     resolution: {integrity: sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==}
     deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
@@ -1251,8 +1260,15 @@ packages:
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
+  tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  tsyringe@4.9.1:
+    resolution: {integrity: sha512-dJCWk0RolAnGk0j839M0lcuS/PtNUPaMsnBosn+wg5N16xy0tofcVuvsidMs0JuRbaJ0wVIT7RsuHWbVIZ5Rcg==}
+    engines: {node: '>= 6.0.0'}
 
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
@@ -2267,6 +2283,8 @@ snapshots:
 
   react@19.1.0: {}
 
+  reflect-metadata@0.2.2: {}
+
   rollup-plugin-inject@3.0.2:
     dependencies:
       estree-walker: 0.6.1
@@ -2402,8 +2420,14 @@ snapshots:
 
   tr46@0.0.3: {}
 
+  tslib@1.14.1: {}
+
   tslib@2.8.1:
     optional: true
+
+  tsyringe@4.9.1:
+    dependencies:
+      tslib: 1.14.1
 
   typescript@5.8.3: {}
 
