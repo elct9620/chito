@@ -12,7 +12,7 @@ const provider = createOpenAI({
 	baseURL: env.CLOUDFLARE_AI_GATEWAY ? `${env.CLOUDFLARE_AI_GATEWAY}/openai` : undefined
 })
 const model = provider('gpt-4o-mini')
-const highModel = provider('gpt-4o')
+const highModel = provider('gpt-4.1')
 const repository = new KvConversationRepository(env.KV)
 const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
 
