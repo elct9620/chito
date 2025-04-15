@@ -1,11 +1,14 @@
 import "reflect-metadata";
 
 import { Hono } from 'hono';
+import { container } from 'tsyringe';
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { env } from 'cloudflare:workers';
+
+import "./container";
 import { ConversationSchema, KvConversationRepository } from './repository/KvConversationRepository';
 
 const app = new Hono();
@@ -16,7 +19,7 @@ const provider = createOpenAI({
 const model = provider('gpt-4o-mini')
 const highModel = provider('gpt-4.1')
 const repository = new KvConversationRepository(env.KV)
-const bot = new Telegraf(env.TELEGRAM_BOT_TOKEN)
+const bot = container.resolve(Telegraf);
 
 bot.on(message('text'), async (ctx) => {
 	const conversationId = ctx.message.chat.id.toString();
