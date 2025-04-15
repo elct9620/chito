@@ -8,9 +8,10 @@ import { generateText, LanguageModelV1 } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { env } from 'cloudflare:workers';
 
-import "./container";
 import { ConversationSchema, KvConversationRepository } from './repository/KvConversationRepository';
 import { AssistantModel } from "./container";
+import { route as RegisterRoute } from './controller/RegisterController';
+
 
 const app = new Hono();
 const model = container.resolve<LanguageModelV1>(AssistantModel)
@@ -129,12 +130,7 @@ app.get('/', (c) => {
 	return c.text('Hello World!');
 });
 
-app.get('/register', async (c) => {
-	await bot.telegram.setWebhook(
-		`https://${env.TELEGRAM_BOT_DOMAIN}/webhook`,
-	);
-	return c.text('Webhook registered');
-});
+app.route('/register', RegisterRoute);
 
 app.post('/webhook', async (c) => {
 	const body = await c.req.json();
