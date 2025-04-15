@@ -10,6 +10,7 @@ import { env } from 'cloudflare:workers';
 
 import { ConversationSchema, KvConversationRepository } from './repository/KvConversationRepository';
 import { AssistantModel } from "./container";
+import { route as RootRoute } from './controller/RootController';
 import { route as RegisterRoute } from './controller/RegisterController';
 
 
@@ -126,10 +127,7 @@ Do not include any other information not related to the receipt.`,
 	await ctx.reply(text);
 });
 
-app.get('/', (c) => {
-	return c.text('Hello World!');
-});
-
+app.route('/', RootRoute);
 app.route('/register', RegisterRoute);
 
 app.post('/webhook', async (c) => {
