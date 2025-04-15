@@ -4,20 +4,17 @@ import { Hono } from 'hono';
 import { container } from 'tsyringe';
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
-import { generateText } from 'ai';
+import { generateText, LanguageModelV1 } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { env } from 'cloudflare:workers';
 
 import "./container";
 import { ConversationSchema, KvConversationRepository } from './repository/KvConversationRepository';
+import { AssistantModel } from "./container";
 
 const app = new Hono();
-const provider = createOpenAI({
-	apiKey: env.OPENAI_API_TOKEN,
-	baseURL: env.CLOUDFLARE_AI_GATEWAY ? `${env.CLOUDFLARE_AI_GATEWAY}/openai` : undefined
-})
-const model = provider('gpt-4o-mini')
-const highModel = provider('gpt-4.1')
+const model = container.resolve<LanguageModelV1>(AssistantModel)
+const highModel = container.resolve<LanguageModelV1>(AssistantModel);
 const repository = new KvConversationRepository(env.KV)
 const bot = container.resolve(Telegraf);
 
