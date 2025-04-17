@@ -1,8 +1,6 @@
 import "reflect-metadata";
 
 import { Hono } from "hono";
-import { Telegraf } from "telegraf";
-import { container } from "tsyringe";
 
 import "./bot/telegram";
 import { route as RegisterRoute } from "./controller/RegisterController";
