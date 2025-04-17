@@ -7,11 +7,9 @@
 	"name": "chito",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-13",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	/**
 	 * Smart Placement
@@ -28,16 +26,15 @@
 	"kv_namespaces": [
 		{
 			"binding": "KV",
-			"id": "97163ef10ceb4dd597a4edeffdedc3e4"
-		}
+			"id": "97163ef10ceb4dd597a4edeffdedc3e4",
+		},
 	],
 
 	/**
 	 * Environment Variables
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 	 */
-	"vars": {
-	},
+	"vars": {},
 	/**
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/

@@ -1,6 +1,5 @@
-import { Hono } from 'hono';
+import { Hono } from "hono";
 
-export const route = new Hono().
-	get('/', async (c) => {
-		return c.text('Chito Assistant');
-	})
+export const route = new Hono().get("/", async (c) => {
+	return c.text("Chito Assistant");
+});

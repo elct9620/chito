@@ -1,20 +1,20 @@
-import { env } from 'cloudflare:workers';
-import { container } from 'tsyringe';
-import { Telegraf } from 'telegraf';
-import { message } from 'telegraf/filters';
-import { generateText, LanguageModelV1 } from 'ai';
+import { generateText, LanguageModelV1 } from "ai";
+import { env } from "cloudflare:workers";
+import { Telegraf } from "telegraf";
+import { message } from "telegraf/filters";
+import { container } from "tsyringe";
 
-import { ConversationSchema, KvConversationRepository } from '../../repository/KvConversationRepository';
+import { KvConversationRepository } from "../../repository/KvConversationRepository";
 
 import { AssistantModel, OcrModel } from "../../container";
 
 const bot = container.resolve(Telegraf);
 
-const model = container.resolve<LanguageModelV1>(AssistantModel)
+const model = container.resolve<LanguageModelV1>(AssistantModel);
 const highModel = container.resolve<LanguageModelV1>(OcrModel);
-const repository = new KvConversationRepository(env.KV)
+const repository = new KvConversationRepository(env.KV);
 
-bot.on(message('text'), async (ctx) => {
+bot.on(message("text"), async (ctx) => {
 	const conversationId = ctx.message.chat.id.toString();
 	let conversation = await repository.find(conversationId);
 
@@ -22,34 +22,35 @@ bot.on(message('text'), async (ctx) => {
 		messages: [
 			...conversation.messages,
 			{
-				role: 'user',
+				role: "user",
 				content: ctx.message.text,
-			}
-		]
-	}
+			},
+		],
+	};
 
 	const { text } = await generateText({
 		model: model,
-		system: 'You are travel assistant. Help the user to resolve their question in Chinese (Taiwan)',
-		messages: conversation.messages
-	})
+		system:
+			"You are travel assistant. Help the user to resolve their question in Chinese (Taiwan)",
+		messages: conversation.messages,
+	});
 
 	conversation = {
 		...conversation,
 		messages: [
 			...conversation.messages,
 			{
-				role: 'assistant',
+				role: "assistant",
 				content: text,
-			}
-		]
-	}
+			},
+		],
+	};
 
 	await repository.save(conversationId, conversation);
 	await ctx.reply(text);
-})
+});
 
-bot.on(message('photo'), async (ctx) => {
+bot.on(message("photo"), async (ctx) => {
 	const conversationId = ctx.message.chat.id.toString();
 	let conversation = await repository.find(conversationId);
 
@@ -70,28 +71,26 @@ RULES:
 		`,
 		messages: [
 			{
-				role: 'user',
-				content: [
-					{ type: 'image', image: fileUrl.toString() },
-				]
-			}
-		]
-	})
+				role: "user",
+				content: [{ type: "image", image: fileUrl.toString() }],
+			},
+		],
+	});
 
 	conversation = {
 		messages: [
 			...conversation.messages,
 			{
-				role: 'system',
+				role: "system",
 				content: `The text recognized from the image is:
-${ocrText}`
+${ocrText}`,
 			},
 			{
-				role: 'user',
-				content: `Help me to take a note of the receipt in Chinese (Taiwan)`
-			}
-		]
-	}
+				role: "user",
+				content: `Help me to take a note of the receipt in Chinese (Taiwan)`,
+			},
+		],
+	};
 
 	const { text } = await generateText({
 		model: model,
@@ -103,22 +102,20 @@ ${ocrText}`
 4. Include the total amount in the summary.
 
 Do not include any other information not related to the receipt.`,
-		messages: conversation.messages
-	})
+		messages: conversation.messages,
+	});
 
 	conversation = {
 		...conversation,
 		messages: [
 			...conversation.messages,
 			{
-				role: 'assistant',
+				role: "assistant",
 				content: text,
-			}
-		]
-	}
+			},
+		],
+	};
 
 	await repository.save(conversationId, conversation);
 	await ctx.reply(text);
 });
-
-
