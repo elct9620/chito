@@ -39,6 +39,16 @@
 		/* Skip type checking all .d.ts files. */
 		"skipLibCheck": true,
 
+		/* Path Alias */
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"],
+			"@controller/*": ["src/controller/*"],
+			"@repository/*": ["src/repository/*"],
+			"@usecase/*": ["src/usecase/*"],
+			"@bot/*": ["src/bot/*"]
+		},
+
 		/* Dependency Injection */
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true
