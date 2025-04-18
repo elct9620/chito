@@ -20,7 +20,7 @@ const provider = createOpenAI({
 		: undefined,
 });
 container.register(AssistantModel, {
-	useValue: provider("gpt-4.1-mini"),
+	useValue: provider("gpt-4.1-nano"),
 });
 container.register(OcrModel, {
 	useValue: provider("gpt-4.1-mini"),
