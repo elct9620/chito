@@ -3,6 +3,9 @@ import { env } from "cloudflare:workers";
 import { Telegraf } from "telegraf";
 import { container } from "tsyringe";
 
+import { KvConversationRepository } from "@repository/KvConversationRepository";
+import { IConversationRepository } from "@usecase/interface";
+
 export const AssistantModel = Symbol("AssistantModel");
 export const OcrModel = Symbol("OcrModel");
 
@@ -21,4 +24,8 @@ container.register(AssistantModel, {
 });
 container.register(OcrModel, {
 	useValue: provider("gpt-4o-mini"),
+});
+
+container.register(IConversationRepository, {
+	useValue: new KvConversationRepository(env.KV),
 });

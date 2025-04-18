@@ -1,34 +1,4 @@
-export type ConversationTextContentSchema = {
-	type: "text";
-	text: string;
-};
-
-export type ConversationImageContentSchema = {
-	type: "image";
-	image: string;
-};
-
-export type ConversationUserContentSchema =
-	| ConversationTextContentSchema
-	| ConversationImageContentSchema;
-
-export type ConversationMessageSchema =
-	| {
-			role: "user";
-			content: string | ConversationUserContentSchema[];
-	  }
-	| {
-			role: "assistant";
-			content: string;
-	  }
-	| {
-			role: "system";
-			content: string;
-	  };
-
-export type ConversationSchema = {
-	messages: ConversationMessageSchema[];
-};
+import { ConversationSchema } from "@usecase/interface";
 
 export class KvConversationRepository {
 	constructor(private readonly kv: KVNamespace) {}

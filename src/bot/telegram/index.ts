@@ -1,18 +1,21 @@
 import { generateText, LanguageModelV1 } from "ai";
-import { env } from "cloudflare:workers";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { container } from "tsyringe";
 
-import { KvConversationRepository } from "../../repository/KvConversationRepository";
-
-import { AssistantModel, OcrModel } from "../../container";
+import { AssistantModel, OcrModel } from "@/container";
+import {
+	ConversationRepository,
+	IConversationRepository,
+} from "@/usecase/interface";
 
 const bot = container.resolve(Telegraf);
 
 const model = container.resolve<LanguageModelV1>(AssistantModel);
 const highModel = container.resolve<LanguageModelV1>(OcrModel);
-const repository = new KvConversationRepository(env.KV);
+const repository = container.resolve<ConversationRepository>(
+	IConversationRepository,
+);
 
 bot.on(message("text"), async (ctx) => {
 	await ctx.sendChatAction("typing");
