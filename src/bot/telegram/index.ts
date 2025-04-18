@@ -15,6 +15,8 @@ const highModel = container.resolve<LanguageModelV1>(OcrModel);
 const repository = new KvConversationRepository(env.KV);
 
 bot.on(message("text"), async (ctx) => {
+	await ctx.sendChatAction("typing");
+
 	const conversationId = ctx.message.chat.id.toString();
 	let conversation = await repository.find(conversationId);
 
@@ -51,6 +53,8 @@ bot.on(message("text"), async (ctx) => {
 });
 
 bot.on(message("photo"), async (ctx) => {
+	await ctx.sendChatAction("typing");
+
 	const conversationId = ctx.message.chat.id.toString();
 	let conversation = await repository.find(conversationId);
 
