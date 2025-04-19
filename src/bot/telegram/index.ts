@@ -5,11 +5,12 @@ import { container } from "tsyringe";
 
 import { AssistantModel, OcrModel } from "@/container";
 import {
-	AssistantInstruction,
 	OcrInstruction,
 	ReceiptSummaryInstruction,
 } from "@/entity/Instruction";
+import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
 import {
+	AssistantService,
 	ConversationRepository,
 	IConversationRepository,
 } from "@/usecase/interface";
@@ -38,25 +39,21 @@ bot.on(message("text"), async (ctx) => {
 		],
 	};
 
-	const { text } = await generateText({
-		model: model,
-		system: AssistantInstruction.content,
-		messages: conversation.messages,
-	});
+	const assistantService = container.resolve<AssistantService>(
+		AiSdkAssistantService,
+	);
+	const reply = await assistantService.execute(conversation.messages);
 
 	conversation = {
 		...conversation,
-		messages: [
-			...conversation.messages,
-			{
-				role: "assistant",
-				content: text,
-			},
-		],
+		messages: [...conversation.messages, reply],
 	};
 
 	await repository.save(conversationId, conversation);
-	await ctx.reply(text);
+
+	if (reply.role === "assistant") {
+		await ctx.reply(reply.content);
+	}
 });
 
 bot.on(message("photo"), async (ctx) => {
