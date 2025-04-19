@@ -17,7 +17,7 @@ RULES:
 	- Logos should be wrapped in square brackets. Ex: [Coca-Cola]`,
 );
 
-export const ReceiptSummaryInstruction = new Instruction(
+export const ReceiptNoteInstruction = new Instruction(
 	`Summarize receipt include the following information:
 1. Do not include any markdown formatting.
 2. Use bullet notes format with emojis e.g. 🏪, 📅, ⏰, 🧾, 💵.

@@ -8,3 +8,7 @@ export interface AssistantService {
 export interface OcrService {
 	execute(image: string): Promise<string>;
 }
+
+export interface ReceiptNoteService {
+	execute(receiptContent: string): Promise<Message>;
+}
