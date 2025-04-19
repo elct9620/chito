@@ -16,8 +16,13 @@ export class AiSdkReceiptNoteService implements ReceiptNoteService {
 			system: ReceiptNoteInstruction.content,
 			messages: [
 				{
+					role: "system",
+					content: `The text recognized from the receipt is:
+${receiptContent}`,
+				},
+				{
 					role: "user",
-					content: receiptContent,
+					content: "Help me to take a note of the receipt in Chinese (Taiwan)",
 				},
 			],
 		});
