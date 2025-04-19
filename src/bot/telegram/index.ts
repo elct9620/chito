@@ -1,10 +1,9 @@
-import { generateText, LanguageModelV1 } from "ai";
+import { LanguageModelV1 } from "ai";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { container } from "tsyringe";
 
 import { AssistantModel } from "@/container";
-import { ReceiptSummaryInstruction } from "@/entity/Instruction";
 import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
 import { AiSdkOcrService } from "@/service/AiSdkOcrService";
 import {
@@ -81,23 +80,19 @@ ${ocrText}`,
 		],
 	};
 
-	const { text } = await generateText({
-		model: model,
-		system: ReceiptSummaryInstruction.content,
-		messages: conversation.messages,
-	});
+	const assistantService = container.resolve<AssistantService>(
+		AiSdkAssistantService,
+	);
+	const reply = await assistantService.execute(conversation.messages);
 
 	conversation = {
 		...conversation,
-		messages: [
-			...conversation.messages,
-			{
-				role: "assistant",
-				content: text,
-			},
-		],
+		messages: [...conversation.messages, reply],
 	};
 
 	await repository.save(conversationId, conversation);
-	await ctx.reply(text);
+	
+	if (reply.role === "assistant") {
+		await ctx.reply(reply.content);
+	}
 });
