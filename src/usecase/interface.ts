@@ -10,5 +10,5 @@ export interface OcrService {
 }
 
 export interface ReceiptNoteService {
-	execute(receiptContent: string): Promise<string>;
+	execute(conversation: Conversation, receiptContent: string): Promise<string>;
 }
