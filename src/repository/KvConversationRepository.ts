@@ -1,10 +1,11 @@
-import { ConversationSchema } from "@usecase/interface";
+import { Message } from "@entity/Message";
+import { ConversationRepository } from "@usecase/interface";
 
-export class KvConversationRepository {
+export class KvConversationRepository implements ConversationRepository {
 	constructor(private readonly kv: KVNamespace) {}
 
-	async find(id: string): Promise<ConversationSchema> {
-		const conversation = await this.kv.get<ConversationSchema>(
+	async find(id: string): Promise<{ messages: Message[] }> {
+		const conversation = await this.kv.get<{ messages: Message[] }>(
 			`conversation:${id}`,
 			"json",
 		);
@@ -14,7 +15,7 @@ export class KvConversationRepository {
 		return conversation;
 	}
 
-	async save(id: string, conversation: ConversationSchema): Promise<void> {
+	async save(id: string, conversation: { messages: Message[] }): Promise<void> {
 		await this.kv.put(`conversation:${id}`, JSON.stringify(conversation));
 	}
 }
