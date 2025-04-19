@@ -46,6 +46,7 @@
 			"@controller/*": ["src/controller/*"],
 			"@repository/*": ["src/repository/*"],
 			"@usecase/*": ["src/usecase/*"],
+			"@entity/*": ["src/entity/*"],
 			"@bot/*": ["src/bot/*"]
 		},
 
