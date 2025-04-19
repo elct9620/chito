@@ -1,13 +1,8 @@
+import { Conversation } from "@entity/Conversation";
 import { type Message } from "@entity/Message";
 
-export const IConversationRepository = Symbol("ConversationRepository");
-export interface ConversationRepository {
-	find(id: string): Promise<{ messages: Message[] }>;
-	save(id: string, conversation: { messages: Message[] }): Promise<void>;
-}
-
 export interface AssistantService {
-	execute(messages: Message[]): Promise<Message>;
+	execute(conversation: Conversation, mssages: Message[]): Promise<Message>;
 }
 
 export interface OcrService {
