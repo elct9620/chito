@@ -57,7 +57,7 @@ bot.on(message("photo"), async (ctx) => {
 	const receiptNoteService = container.resolve<ReceiptNoteService>(
 		AiSdkReceiptNoteService,
 	);
-	const reply = await receiptNoteService.execute(ocrText);
+	const reply = await receiptNoteService.execute(conversation, ocrText);
 
 	await ctx.reply(reply);
 });
