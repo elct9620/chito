@@ -9,3 +9,7 @@ export interface ConversationRepository {
 export interface AssistantService {
 	execute(messages: Message[]): Promise<Message>;
 }
+
+export interface OcrService {
+	execute(image: string): Promise<string>;
+}
