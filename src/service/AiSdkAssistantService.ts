@@ -17,7 +17,7 @@ export class AiSdkAssistantService implements AssistantService {
 	async execute(
 		conversation: Conversation,
 		messages: Message[],
-	): Promise<Message> {
+	): Promise<string> {
 		const existMessage = await this.getMessages(conversation.id);
 
 		const { text } = await generateText({
@@ -26,18 +26,16 @@ export class AiSdkAssistantService implements AssistantService {
 			messages: [...existMessage, ...messages],
 		});
 
-		const replyMessage: Message = {
-			role: "assistant",
-			content: text,
-		};
-
 		await this.saveMessages(conversation.id, [
 			...existMessage,
 			...messages,
-			replyMessage,
+			{
+				role: "assistant",
+				content: text,
+			},
 		]);
 
-		return replyMessage;
+		return text;
 	}
 
 	private async getMessages(id: string): Promise<Message[]> {

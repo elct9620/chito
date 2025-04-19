@@ -2,7 +2,7 @@ import { Conversation } from "@entity/Conversation";
 import { type Message } from "@entity/Message";
 
 export interface AssistantService {
-	execute(conversation: Conversation, mssages: Message[]): Promise<Message>;
+	execute(conversation: Conversation, mssages: Message[]): Promise<string>;
 }
 
 export interface OcrService {
@@ -10,5 +10,5 @@ export interface OcrService {
 }
 
 export interface ReceiptNoteService {
-	execute(receiptContent: string): Promise<Message>;
+	execute(receiptContent: string): Promise<string>;
 }

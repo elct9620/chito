@@ -8,7 +8,11 @@ import { Conversation, ConversationProvider } from "@/entity/Conversation";
 import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
 import { AiSdkOcrService } from "@/service/AiSdkOcrService";
 import { AiSdkReceiptNoteService } from "@/service/AiSdkReceiptNoteService";
-import { AssistantService, OcrService, ReceiptNoteService } from "@/usecase/interface";
+import {
+	AssistantService,
+	OcrService,
+	ReceiptNoteService,
+} from "@/usecase/interface";
 
 const bot = container.resolve(Telegraf);
 
@@ -32,9 +36,7 @@ bot.on(message("text"), async (ctx) => {
 		},
 	]);
 
-	if (reply.role === "assistant") {
-		await ctx.reply(reply.content);
-	}
+	await ctx.reply(reply);
 });
 
 bot.on(message("photo"), async (ctx) => {
@@ -57,7 +59,5 @@ bot.on(message("photo"), async (ctx) => {
 	);
 	const reply = await receiptNoteService.execute(ocrText);
 
-	if (reply.role === "assistant") {
-		await ctx.reply(reply.content);
-	}
+	await ctx.reply(reply);
 });
