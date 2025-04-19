@@ -7,7 +7,8 @@ import { AssistantModel } from "@/container";
 import { Conversation, ConversationProvider } from "@/entity/Conversation";
 import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
 import { AiSdkOcrService } from "@/service/AiSdkOcrService";
-import { AssistantService, OcrService } from "@/usecase/interface";
+import { AiSdkReceiptNoteService } from "@/service/AiSdkReceiptNoteService";
+import { AssistantService, OcrService, ReceiptNoteService } from "@/usecase/interface";
 
 const bot = container.resolve(Telegraf);
 
@@ -51,20 +52,10 @@ bot.on(message("photo"), async (ctx) => {
 	const ocrService = container.resolve<OcrService>(AiSdkOcrService);
 	const ocrText = await ocrService.execute(fileUrl.toString());
 
-	const assistantService = container.resolve<AssistantService>(
-		AiSdkAssistantService,
+	const receiptNoteService = container.resolve<ReceiptNoteService>(
+		AiSdkReceiptNoteService,
 	);
-	const reply = await assistantService.execute(conversation, [
-		{
-			role: "system",
-			content: `The text recognized from the image is:
-${ocrText}`,
-		},
-		{
-			role: "user",
-			content: `Help me to take a note of the receipt in Chinese (Taiwan)`,
-		},
-	]);
+	const reply = await receiptNoteService.execute(ocrText);
 
 	if (reply.role === "assistant") {
 		await ctx.reply(reply.content);
