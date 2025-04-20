@@ -15,13 +15,13 @@ import {
 } from "@/usecase/interface";
 
 const bot = container.resolve(Telegraf);
-const repository = container.resolve<ConversationRepository>(
-	IConversationRepository,
-);
 
 bot.on(message("text"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
+	const repository = container.resolve<ConversationRepository>(
+		IConversationRepository,
+	);
 	const conversationId = ctx.message.chat.id.toString();
 	const conversation = await repository.findByProvider(
 		ConversationProvider.Telegram,
@@ -50,6 +50,9 @@ bot.on(message("text"), async (ctx) => {
 bot.on(message("photo"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
+	const repository = container.resolve<ConversationRepository>(
+		IConversationRepository,
+	);
 	const conversationId = ctx.message.chat.id.toString();
 	const conversation = await repository.findByProvider(
 		ConversationProvider.Telegram,
