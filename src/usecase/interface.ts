@@ -1,5 +1,4 @@
 import { Conversation, ConversationProvider } from "@entity/Conversation";
-import { type Message } from "@entity/Message";
 
 export const IConversationRepository = Symbol("ConversationRepository");
 export interface ConversationRepository {
@@ -11,7 +10,7 @@ export interface ConversationRepository {
 }
 
 export interface AssistantService {
-	execute(conversation: Conversation, mssages: Message[]): Promise<string>;
+	execute(conversation: Conversation): Promise<string>;
 }
 
 export interface OcrService {
@@ -19,5 +18,5 @@ export interface OcrService {
 }
 
 export interface ReceiptNoteService {
-	execute(conversation: Conversation, receiptContent: string): Promise<string>;
+	execute(conversation: Conversation): Promise<string>;
 }
