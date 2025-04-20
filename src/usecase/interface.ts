@@ -1,5 +1,9 @@
 import { Conversation, ConversationProvider } from "@entity/Conversation";
 
+export interface TextMessagePresenter {
+	setText(text: string): void;
+}
+
 export const IConversationRepository = Symbol("ConversationRepository");
 export interface ConversationRepository {
 	findByProvider(

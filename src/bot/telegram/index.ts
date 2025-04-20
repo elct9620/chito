@@ -7,22 +7,24 @@ import { KvConversationRepository } from "@/repository/KvConversationRepository"
 import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
 import { AiSdkOcrService } from "@/service/AiSdkOcrService";
 import { AiSdkReceiptNoteService } from "@/service/AiSdkReceiptNoteService";
+import { TelegramTextMessagePresenter } from "@presenter/TelegramTextMessagePresenter";
 import {
 	AssistantService,
 	ConversationRepository,
 	OcrService,
 	ReceiptNoteService,
-} from "@/usecase/interface";
+} from "@usecase/interface";
 
 const bot = container.resolve(Telegraf);
 
 bot.on(message("text"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
+	const conversationId = ctx.message.chat.id.toString();
+	const presenter = new TelegramTextMessagePresenter(conversationId);
 	const repository = container.resolve<ConversationRepository>(
 		KvConversationRepository,
 	);
-	const conversationId = ctx.message.chat.id.toString();
 	const conversation = await repository.findByProvider(
 		ConversationProvider.Telegram,
 		conversationId,
@@ -37,6 +39,7 @@ bot.on(message("text"), async (ctx) => {
 		AiSdkAssistantService,
 	);
 	const reply = await assistantService.execute(conversation);
+	presenter.setText(reply);
 
 	conversation.addMessages({
 		role: "assistant",
@@ -44,16 +47,17 @@ bot.on(message("text"), async (ctx) => {
 	});
 	await repository.save(conversation);
 
-	await ctx.reply(reply);
+	await presenter.render(ctx);
 });
 
 bot.on(message("photo"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
+	const conversationId = ctx.message.chat.id.toString();
+	const presenter = new TelegramTextMessagePresenter(conversationId);
 	const repository = container.resolve<ConversationRepository>(
 		KvConversationRepository,
 	);
-	const conversationId = ctx.message.chat.id.toString();
 	const conversation = await repository.findByProvider(
 		ConversationProvider.Telegram,
 		conversationId,
@@ -81,6 +85,7 @@ ${ocrText}`,
 		AiSdkReceiptNoteService,
 	);
 	const reply = await receiptNoteService.execute(conversation);
+	presenter.setText(reply);
 
 	conversation.addMessages({
 		role: "assistant",
@@ -88,5 +93,5 @@ ${ocrText}`,
 	});
 	await repository.save(conversation);
 
-	await ctx.reply(reply);
+	await presenter.render(ctx);
 });

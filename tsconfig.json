@@ -45,6 +45,7 @@
 			"@/*": ["src/*"],
 			"@controller/*": ["src/controller/*"],
 			"@repository/*": ["src/repository/*"],
+			"@presenter/*": ["src/presenter/*"],
 			"@usecase/*": ["src/usecase/*"],
 			"@entity/*": ["src/entity/*"],
 			"@bot/*": ["src/bot/*"]
