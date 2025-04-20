@@ -3,16 +3,16 @@ import { env } from "cloudflare:workers";
 import { Telegraf } from "telegraf";
 import { container } from "tsyringe";
 
-import { IConversationRepository } from "@/usecase/interface";
 import { KvConversationRepository } from "@/repository/KvConversationRepository";
+import {
+	ConversationRepository,
+	IConversationRepository,
+} from "@/usecase/interface";
+import { LanguageModel } from "ai";
 
 export const KvStorage = Symbol("KvStorage");
 export const AssistantModel = Symbol("AssistantModel");
 export const OcrModel = Symbol("OcrModel");
-
-container.register(Telegraf, {
-	useValue: new Telegraf(env.TELEGRAM_BOT_TOKEN),
-});
 
 const provider = createOpenAI({
 	apiKey: env.OPENAI_API_TOKEN,
@@ -25,17 +25,22 @@ const provider = createOpenAI({
 		}),
 	},
 });
-container.register(AssistantModel, {
+
+container.register(Telegraf, {
+	useValue: new Telegraf(env.TELEGRAM_BOT_TOKEN),
+});
+
+container.register<LanguageModel>(AssistantModel, {
 	useValue: provider("gpt-4o-mini"),
 });
-container.register(OcrModel, {
+container.register<LanguageModel>(OcrModel, {
 	useValue: provider("gpt-4.1-mini"),
 });
 
-container.register(KvStorage, {
+container.register<KVNamespace>(KvStorage, {
 	useValue: env.KV,
 });
 
-container.register(IConversationRepository, {
+container.register<ConversationRepository>(IConversationRepository, {
 	useClass: KvConversationRepository,
 });
