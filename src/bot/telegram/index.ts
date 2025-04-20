@@ -3,13 +3,13 @@ import { message } from "telegraf/filters";
 import { container } from "tsyringe";
 
 import { ConversationProvider } from "@/entity/Conversation";
+import { KvConversationRepository } from "@/repository/KvConversationRepository";
 import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
 import { AiSdkOcrService } from "@/service/AiSdkOcrService";
 import { AiSdkReceiptNoteService } from "@/service/AiSdkReceiptNoteService";
 import {
 	AssistantService,
 	ConversationRepository,
-	IConversationRepository,
 	OcrService,
 	ReceiptNoteService,
 } from "@/usecase/interface";
@@ -20,7 +20,7 @@ bot.on(message("text"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
 	const repository = container.resolve<ConversationRepository>(
-		IConversationRepository,
+		KvConversationRepository,
 	);
 	const conversationId = ctx.message.chat.id.toString();
 	const conversation = await repository.findByProvider(
@@ -51,7 +51,7 @@ bot.on(message("photo"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
 	const repository = container.resolve<ConversationRepository>(
-		IConversationRepository,
+		KvConversationRepository,
 	);
 	const conversationId = ctx.message.chat.id.toString();
 	const conversation = await repository.findByProvider(
