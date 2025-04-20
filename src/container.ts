@@ -3,6 +3,9 @@ import { env } from "cloudflare:workers";
 import { Telegraf } from "telegraf";
 import { container } from "tsyringe";
 
+import { IConversationRepository } from "@/usecase/interface";
+import { KvConversationRepository } from "@/repository/KvConversationRepository";
+
 export const KvStorage = Symbol("KvStorage");
 export const AssistantModel = Symbol("AssistantModel");
 export const OcrModel = Symbol("OcrModel");
@@ -31,4 +34,8 @@ container.register(OcrModel, {
 
 container.register(KvStorage, {
 	useValue: env.KV,
+});
+
+container.register(IConversationRepository, {
+	useClass: KvConversationRepository,
 });
