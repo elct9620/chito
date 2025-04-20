@@ -10,20 +10,22 @@ import { AiSdkOcrService } from "@/service/AiSdkOcrService";
 import { AiSdkReceiptNoteService } from "@/service/AiSdkReceiptNoteService";
 import {
 	AssistantService,
+	ConversationRepository,
+	IConversationRepository,
 	OcrService,
 	ReceiptNoteService,
 } from "@/usecase/interface";
 
 const bot = container.resolve(Telegraf);
+const repository = container.resolve<ConversationRepository>(IConversationRepository);
 
-const model = container.resolve<LanguageModelV1>(AssistantModel);
 bot.on(message("text"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
 	const conversationId = ctx.message.chat.id.toString();
-	const conversation = new Conversation(
-		conversationId,
+	const conversation = await repository.findByProvider(
 		ConversationProvider.Telegram,
+		conversationId
 	);
 
 	const assistantService = container.resolve<AssistantService>(
@@ -43,9 +45,9 @@ bot.on(message("photo"), async (ctx) => {
 	await ctx.sendChatAction("typing");
 
 	const conversationId = ctx.message.chat.id.toString();
-	const conversation = new Conversation(
-		conversationId,
+	const conversation = await repository.findByProvider(
 		ConversationProvider.Telegram,
+		conversationId
 	);
 
 	const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
