@@ -16,6 +16,11 @@ const provider = createOpenAI({
 	baseURL: env.CLOUDFLARE_AI_GATEWAY
 		? `${env.CLOUDFLARE_AI_GATEWAY}/openai`
 		: undefined,
+	headers: {
+		"cf-aig-metadata": JSON.stringify({
+			VERSION: env.VERSION_METADATA.id,
+		}),
+	},
 });
 container.register(AssistantModel, {
 	useValue: provider("gpt-4o-mini"),
