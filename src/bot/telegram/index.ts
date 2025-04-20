@@ -28,17 +28,23 @@ bot.on(message("text"), async (ctx) => {
 		conversationId
 	);
 
+	// 添加用戶消息
+	conversation.addMessages({
+		role: "user",
+		content: ctx.message.text,
+	});
+
+	// 使用助手服務生成回覆
 	const assistantService = container.resolve<AssistantService>(
 		AiSdkAssistantService,
 	);
-	const reply = await assistantService.execute(conversation, [
-		{
-			role: "user",
-			content: ctx.message.text,
-		},
-	]);
+	const reply = await assistantService.execute(conversation);
 
-	await ctx.reply(reply);
+	// 添加助手回覆並保存對話
+	conversation.addMessages(reply);
+	await repository.save(conversation);
+
+	await ctx.reply(reply.content);
 });
 
 bot.on(message("photo"), async (ctx) => {
@@ -53,13 +59,32 @@ bot.on(message("photo"), async (ctx) => {
 	const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
 	const fileUrl = await ctx.telegram.getFileLink(fileId);
 
+	// 使用OCR服務識別圖片文字
 	const ocrService = container.resolve<OcrService>(AiSdkOcrService);
 	const ocrText = await ocrService.execute(fileUrl.toString());
 
+	// 添加系統消息和用戶請求
+	conversation.addMessages(
+		{
+			role: "system",
+			content: `The text recognized from the receipt is:
+${ocrText}`,
+		},
+		{
+			role: "user",
+			content: "Help me to take a note of the receipt in Chinese (Taiwan)",
+		}
+	);
+
+	// 使用收據筆記服務生成回覆
 	const receiptNoteService = container.resolve<ReceiptNoteService>(
 		AiSdkReceiptNoteService,
 	);
-	const reply = await receiptNoteService.execute(conversation, ocrText);
+	const reply = await receiptNoteService.execute(conversation);
 
-	await ctx.reply(reply);
+	// 添加助手回覆並保存對話
+	conversation.addMessages(reply);
+	await repository.save(conversation);
+
+	await ctx.reply(reply.content);
 });
