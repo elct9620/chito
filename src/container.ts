@@ -18,7 +18,7 @@ const provider = createOpenAI({
 		: undefined,
 	headers: {
 		"cf-aig-metadata": JSON.stringify({
-			VERSION: env.VERSION_METADATA.id,
+			DEPLOYMENT_ID: env.DEPLOYMENT.id,
 		}),
 	},
 });
