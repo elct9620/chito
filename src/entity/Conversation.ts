@@ -29,7 +29,7 @@ export class Conversation {
 		return this._type;
 	}
 
-	public addMessage(message: Message): void {
-		this._messages = [...this._messages, message];
+	public addMessages(...messages: Message[]): void {
+		this._messages = [...this._messages, ...messages];
 	}
 }
