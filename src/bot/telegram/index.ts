@@ -2,18 +2,19 @@ import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { container } from "tsyringe";
 
-import { ConversationProvider } from "@/entity/Conversation";
-import { KvConversationRepository } from "@/repository/KvConversationRepository";
-import { AiSdkAssistantService } from "@/service/AiSdkAssistantService";
-import { AiSdkOcrService } from "@/service/AiSdkOcrService";
-import { AiSdkReceiptNoteService } from "@/service/AiSdkReceiptNoteService";
+import { ConversationProvider } from "@entity/Conversation";
 import { TelegramTextMessagePresenter } from "@presenter/TelegramTextMessagePresenter";
+import { KvConversationRepository } from "@repository/KvConversationRepository";
+import { AiSdkAssistantService } from "@service/AiSdkAssistantService";
+import { AiSdkOcrService } from "@service/AiSdkOcrService";
+import { AiSdkReceiptNoteService } from "@service/AiSdkReceiptNoteService";
 import {
 	AssistantService,
 	ConversationRepository,
 	OcrService,
 	ReceiptNoteService,
 } from "@usecase/interface";
+import { ProcessUserQueryUseCase } from "@usecase/ProcessUserQueryUseCase";
 
 const bot = container.resolve(Telegraf);
 
@@ -25,28 +26,20 @@ bot.on(message("text"), async (ctx) => {
 	const repository = container.resolve<ConversationRepository>(
 		KvConversationRepository,
 	);
-	const conversation = await repository.findByProvider(
-		ConversationProvider.Telegram,
-		conversationId,
-	);
-
-	conversation.addMessages({
-		role: "user",
-		content: ctx.message.text,
-	});
-
 	const assistantService = container.resolve<AssistantService>(
 		AiSdkAssistantService,
 	);
-	const reply = await assistantService.execute(conversation);
-	presenter.setText(reply);
+	const usecase = new ProcessUserQueryUseCase(
+		repository,
+		assistantService,
+		presenter,
+	);
 
-	conversation.addMessages({
-		role: "assistant",
-		content: reply,
+	await usecase.execute({
+		provider: ConversationProvider.Telegram,
+		conversationId,
+		userQuery: ctx.message.text,
 	});
-	await repository.save(conversation);
-
 	await presenter.render(ctx);
 });
 
