@@ -19,6 +19,13 @@ Chito（𨑨迌，tshit-thô）is an AI powered travel assistant. It is designed
 > [!WARNING]
 > The variables are configured as secret variables for now, you need to set them in the Cloudflare dashboard. It will be changed in the future.
 
+## Usage
+
+Create a new group in Telegram and add the bot to the group. You can use the bot in the group.
+
+> [!NOTE]
+> The private chat is working, but use group chat is recommended. The different travel can be managed in different groups and shared with your friends.
+
 ## Features
 
 ### Query
