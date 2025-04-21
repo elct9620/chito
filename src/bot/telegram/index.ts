@@ -14,6 +14,7 @@ import {
 	OcrService,
 	ReceiptNoteService,
 } from "@usecase/interface";
+import { ProcessPhotoUseCase } from "@usecase/ProcessPhotoUseCase";
 import { ProcessUserQueryUseCase } from "@usecase/ProcessUserQueryUseCase";
 
 const bot = container.resolve(Telegraf);
@@ -51,40 +52,26 @@ bot.on(message("photo"), async (ctx) => {
 	const repository = container.resolve<ConversationRepository>(
 		KvConversationRepository,
 	);
-	const conversation = await repository.findByProvider(
-		ConversationProvider.Telegram,
-		conversationId,
+	const ocrService = container.resolve<OcrService>(AiSdkOcrService);
+	const receiptNoteService = container.resolve<ReceiptNoteService>(
+		AiSdkReceiptNoteService,
+	);
+	
+	const usecase = new ProcessPhotoUseCase(
+		repository,
+		ocrService,
+		receiptNoteService,
+		presenter,
 	);
 
 	const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
 	const fileUrl = await ctx.telegram.getFileLink(fileId);
 
-	const ocrService = container.resolve<OcrService>(AiSdkOcrService);
-	const ocrText = await ocrService.execute(fileUrl.toString());
-
-	conversation.addMessages(
-		{
-			role: "system",
-			content: `The text recognized from the receipt is:
-${ocrText}`,
-		},
-		{
-			role: "user",
-			content: "Help me to take a note of the receipt in Chinese (Taiwan)",
-		},
-	);
-
-	const receiptNoteService = container.resolve<ReceiptNoteService>(
-		AiSdkReceiptNoteService,
-	);
-	const reply = await receiptNoteService.execute(conversation);
-	presenter.setText(reply);
-
-	conversation.addMessages({
-		role: "assistant",
-		content: reply,
+	await usecase.execute({
+		provider: ConversationProvider.Telegram,
+		conversationId,
+		photoUrl: fileUrl.toString(),
 	});
-	await repository.save(conversation);
-
+	
 	await presenter.render(ctx);
 });
