@@ -7,6 +7,11 @@ Chito（𨑨迌，tshit-thô）is an AI powered travel assistant. It is designed
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Felct9620%2Fchito)
 
+After deployed, visit the `/register` endpoint to register the webhook for the bot.
+
+> [!NOTE]
+> The ACL will be added in the future. Currently, the admin feature is not available.
+
 ### Variables
 
 | Name                  | Description                                                                 |
