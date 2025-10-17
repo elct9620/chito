@@ -1,0 +1,11 @@
+{
+  "rubric": {
+    "rules": [
+      {
+        "name": "TypeScript Code Quality",
+        "pattern": ".*\\.ts$",
+        "path": "docs/rubrics/typescript.md"
+      }
+    ]
+  }
+}
