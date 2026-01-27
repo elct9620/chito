@@ -15,8 +15,8 @@ importers:
         specifier: ^5.0.52
         version: 5.0.52(zod@3.25.76)
       hono:
-        specifier: ^4.11.4
-        version: 4.11.4
+        specifier: ^4.11.7
+        version: 4.11.7
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -1238,8 +1238,8 @@ packages:
   globrex@0.1.2:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
 
-  hono@4.11.4:
-    resolution: {integrity: sha512-U7tt8JsyrxSRKspfhtLET79pU8K+tInj5QZXs1jSugO1Vq5dFj3kmZsRldo29mTBfcjDRVRXrEZ6LS63Cog9ZA==}
+  hono@4.11.7:
+    resolution: {integrity: sha512-l7qMiNee7t82bH3SeyUCt9UF15EVmaBvsppY2zQtrbIhl/yzBTny+YUxsVjSjQ6gaqaeVtZmGocom8TzBlA4Yw==}
     engines: {node: '>=16.9.0'}
 
   is-arrayish@0.3.2:
@@ -2518,7 +2518,7 @@ snapshots:
 
   globrex@0.1.2: {}
 
-  hono@4.11.4: {}
+  hono@4.11.7: {}
 
   is-arrayish@0.3.2:
     optional: true
